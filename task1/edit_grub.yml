@@ -1,0 +1,15 @@
+---
+- name: disable network devices naming
+  hosts: all
+  tasks:
+  - name: edit grub conf
+    lineinfile:
+      dest: /etc/default/grub
+      regexp: 'GRUB_CMDLINE_LINUX="(.*)"'
+      line: 'GRUB_CMDLINE_LINUX="\1 net.ifnames=0 biosdevname=0"'
+      backrefs: yes
+    notify: regenerate grub conf
+
+  handlers:
+    - name: regenerate grub conf
+      shell: grub2-mkconfig -o /boot/grub2/grub.cfg

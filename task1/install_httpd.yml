@@ -1,0 +1,22 @@
+---
+- name: install httpd
+  hosts: all
+  tasks:
+    - name: install httpd package
+      package:
+        name: httpd
+        state: present
+    - name: create file index.html
+      copy:
+        content: 'Welcome to my web server'
+        dest: /var/www/html/index.html
+    - name: start httpd
+      service:
+        name: httpd
+        state: started
+        enabled: true
+    - name: open ports
+      firewalld:
+        service: http
+        permanent: yes
+        state: enabled

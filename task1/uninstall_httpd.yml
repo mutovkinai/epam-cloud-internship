@@ -1,0 +1,17 @@
+---
+- name: uninstall httpd
+  hosts: all
+  tasks:
+    - name: close firewall
+      firewalld:
+        service: http
+        permanent: yes
+        state: disabled
+    - name: remove index.html
+      file:
+        path: /var/www/html/index.html
+        state: absent
+    - name: remove httpd package
+      package:
+        name: httpd
+        state: absent
