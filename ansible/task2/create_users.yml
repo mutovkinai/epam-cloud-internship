@@ -1,0 +1,16 @@
+---
+- name: create users
+  hosts: all
+  gather_facts: false
+  vars_files: 
+    - vars/users
+    - vault/secret
+  tasks:
+  - name: add users
+    user:
+      name: "{{ item.username }}"
+      home: "{{ item.home }}"
+      comment: "{{item.comment}}"
+      password: "{{ default_password | password_hash('sha512', 'A1B2')}}"
+    loop:
+      "{{ users }}"
