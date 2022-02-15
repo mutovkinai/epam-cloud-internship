@@ -1,0 +1,23 @@
+---
+# tasks file for install_httpd_role
+
+- name: install httpd package
+  package:
+    name: httpd
+    state: present
+- name: Copy file index.html
+  copy:
+    src: "{{ role_path }}/files/index.html"
+    dest: "{{ destination_folder }}/index.html"
+  notify:
+    - Restart httpd service
+- name: start httpd
+  service:
+    name: httpd
+    state: started
+    enabled: true
+- name: open ports
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled

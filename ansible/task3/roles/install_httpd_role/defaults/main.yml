@@ -1,0 +1,3 @@
+---
+# defaults file for install_httpd_role
+destination_folder: /var/www/html

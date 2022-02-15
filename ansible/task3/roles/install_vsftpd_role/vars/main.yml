@@ -1,0 +1,16 @@
+---
+# vars file for install_vsftpd
+anonymous_enable: yes
+local_enable: yes
+write_enable: yes
+anon_upload_enable: yes
+services:
+  - vsftpd
+  - firewalld
+packages:
+  - vsftpd
+  - policycoreutils-python-utils
+  - policycoreutils
+fileperms:
+  - /var/ftp/pub
+  - /var/ftp/pub/upload

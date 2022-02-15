@@ -1,0 +1,47 @@
+---
+- name: Installing packages
+  package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ packages }}"
+- name: Copy vsftpd config using j2 template
+  template:
+    src: vsftpd.j2
+    dest: /etc/vsftpd/vsftpd.conf
+  notify:
+    - restart vsftpd
+- name: Create public directory
+  file:
+    path: /var/ftp/pub
+    state: directory
+    mode: '0755'
+- name: Create directory for upload
+  file:
+    path: /var/ftp/pub/upload
+    state: directory
+    mode: '0777'
+- name: Set SElinux boolean for Anonymous FTP upload
+  seboolean:
+    name: ftpd_anon_write
+    state: true
+    persistent: yes
+- name: Set SElinux file context
+  sefcontext:
+    target: "{{ item }}"
+    setype: public_content_rw_t
+    state: present
+  loop: "{{ fileperms }}"
+  notify:
+    - run restorecon
+- name: Open firewall ports
+  firewalld:
+    service: ftp
+    permanent: yes
+    state: enabled
+    immediate: yes
+- name: Check services
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  loop: "{{ services }}"

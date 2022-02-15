@@ -1,0 +1,4 @@
+---
+# handlers file for install_httpd_role
+- name: Restart httpd service
+  service: name=httpd state=restarted
