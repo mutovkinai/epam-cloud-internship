@@ -3,7 +3,7 @@
 NOTE to use commands u need to be in lib_catalog dir otherwise u need to chage path to Dockerfile and context
 
 ```
-lib_catalog> docker build -t backend .
+docker build -t backend .
 ```
 ### Create network
 ```
